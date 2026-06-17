@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Paste your Google Search Console verification tag here when needed -->
+  <!-- <meta name="google-site-verification" content="YOUR_CODE" /> -->
+  <title>Tahzeeb Akhlaq – App Developer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f11;
+      color: #e8e8e8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #222;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand { font-size: 1.05rem; font-weight: 600; color: #fff; }
+
+    nav a {
+      color: #777;
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-left: 1.5rem;
+    }
+    nav a:hover { color: #fff; }
+
+    /* ── Hero ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+    }
+
+    .avatar {
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6c63ff, #3ecfcf);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; font-weight: 700; color: #fff;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 0.6rem;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      color: #777;
+      max-width: 440px;
+      line-height: 1.6;
+      margin-bottom: 3rem;
+    }
+
+    /* ── App grid ── */
+    .apps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      max-width: 900px;
+      padding: 0 1rem;
+    }
+
+    .app-card {
+      background: #18181b;
+      border: 1px solid #2a2a2e;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: left;
+      transition: border-color 0.2s;
+    }
+    .app-card:hover { border-color: #444; }
+
+    .app-icon {
+      width: 50px; height: 50px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #6c63ff, #3ecfcf);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .app-card h2 { font-size: 1.05rem; font-weight: 600; color: #fff; margin-bottom: 0.35rem; }
+    .app-card p  { font-size: 0.85rem; color: #777; line-height: 1.5; margin-bottom: 1rem; }
+
+    .badge {
+      display: inline-block;
+      background: #6c63ff1a;
+      color: #a09af8;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      border: 1px solid #6c63ff33;
+    }
+
+    /* ── Contact ── */
+    .contact-section {
+      padding: 2.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid #222;
+    }
+    .contact-section p { color: #555; font-size: 0.85rem; margin-bottom: 0.4rem; }
+    .contact-section a { color: #a09af8; text-decoration: none; font-size: 0.95rem; }
+    .contact-section a:hover { text-decoration: underline; }
+
+    footer {
+      padding: 1rem 2rem;
+      border-top: 1px solid #1a1a1a;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: #444;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    footer a { color: #555; text-decoration: none; }
+    footer a:hover { color: #aaa; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <span class="brand">Tahzeeb Akhlaq</span>
+    <nav>
+      <a href="#apps">Apps</a>
+      <a href="#contact">Contact</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <div class="avatar">T</div>
+    <h1>Tahzeeb Akhlaq</h1>
+    <p class="tagline">Independent Android developer building useful, well-crafted apps.</p>
+
+    <!-- ══════════════════════════════════════════
+         ADD / REMOVE APP CARDS HERE
+         Copy one <div class="app-card">…</div>
+         block for each new app you publish.
+    ══════════════════════════════════════════ -->
+    <div class="apps" id="apps">
+
+      <div class="app-card">
+        <div class="app-icon">📱</div>
+        <h2>App Name</h2>
+        <p>Short description of what this app does and who it helps. 1–2 sentences max.</p>
+        <span class="badge">Google Play</span>
+      </div>
+
+      <!-- Example second app (delete if not needed)
+      <div class="app-card">
+        <div class="app-icon">🎯</div>
+        <h2>Another App</h2>
+        <p>Short description of your second app.</p>
+        <span class="badge">Google Play</span>
+      </div>
+      -->
+
+    </div>
+  </main>
+
+  <section class="contact-section" id="contact">
+    <p>Have a question or feedback?</p>
+    <a href="mailto:tahzeebakhlaq26@gmail.com">tahzeebakhlaq26@gmail.com</a>
+  </section>
+
+  <footer>
+    <span>© 2026 Tahzeeb Akhlaq</span>
+    <a href="privacy-policy.html">Privacy Policy</a>
+  </footer>
+
+</body>
+</html>
