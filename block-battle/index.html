@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Block Battle – Multiplayer 3D Shooter</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #00aaff;
+      --blue-glow: #00aaff66;
+      --purple: #6c63ff;
+      --dark: #080a10;
+      --card: #0e1118;
+      --border: #1a1f2e;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--dark);
+      color: #e0e6f0;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem;
+      background: #080a10cc;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #ffffff0d;
+    }
+    .nav-brand { font-size: 1rem; font-weight: 700; color: var(--blue); letter-spacing: 0.05em; }
+    .nav-links a { color: #778; text-decoration: none; font-size: 0.85rem; margin-left: 1.5rem; }
+    .nav-links a:hover { color: #fff; }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 60%, #00aaff18 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 20%, #6c63ff12 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: #00aaff12; color: var(--blue);
+      border: 1px solid #00aaff33;
+      border-radius: 20px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em;
+      padding: 0.3rem 0.9rem;
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .hero h1 span {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--blue);
+      text-shadow: 0 0 40px var(--blue-glow);
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: #4a7fa0;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      color: #778;
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--blue);
+      color: #000;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: box-shadow 0.2s, transform 0.2s;
+      box-shadow: 0 0 24px var(--blue-glow);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 36px var(--blue-glow); }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: transparent;
+      color: #aac;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.85rem 1.75rem;
+      border-radius: 10px;
+      border: 1px solid #1a2030;
+      text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--blue); color: #fff; }
+
+    /* ── Stats strip ── */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num { font-size: 1.8rem; font-weight: 800; color: var(--blue); letter-spacing: -0.03em; }
+    .stat-label { font-size: 0.75rem; color: #556; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.2rem; }
+
+    /* ── Section shared ── */
+    section { padding: 5rem 2rem; }
+    .section-label {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+    .section-desc {
+      text-align: center;
+      color: #556;
+      font-size: 0.95rem;
+      max-width: 480px;
+      margin: 0 auto 3rem;
+      line-height: 1.6;
+    }
+
+    /* ── Game Modes ── */
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .mode-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .mode-card:hover { border-color: #00aaff44; transform: translateY(-3px); }
+    .mode-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .mode-card h3 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.4rem; }
+    .mode-card p { font-size: 0.83rem; color: #556; line-height: 1.5; }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.5rem;
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .feature-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .feature-card h4 { font-size: 0.9rem; font-weight: 700; color: #ccd; margin-bottom: 0.25rem; }
+    .feature-card p { font-size: 0.8rem; color: #556; line-height: 1.4; }
+
+    /* ── Controls ── */
+    .controls-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    @media (max-width: 560px) { .controls-wrap { grid-template-columns: 1fr; } }
+    .controls-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+    .controls-card h3 { font-size: 0.85rem; font-weight: 700; color: var(--blue); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1rem; }
+    .key-row { display: flex; justify-content: space-between; align-items: center; padding: 0.45rem 0; border-bottom: 1px solid #ffffff07; }
+    .key-row:last-child { border-bottom: none; }
+    .key-action { font-size: 0.8rem; color: #778; }
+    .key-bind {
+      background: #ffffff0d;
+      color: #aac;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.15rem 0.55rem;
+      border-radius: 5px;
+      border: 1px solid #ffffff14;
+      font-family: monospace;
+    }
+
+    /* ── CTA ── */
+    .cta {
+      text-align: center;
+      padding: 6rem 2rem;
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 100%, #00aaff0f 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta h2 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; color: #fff; letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .cta p { color: #556; font-size: 0.95rem; margin-bottom: 2rem; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.78rem; color: #334;
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    footer a { color: #445; text-decoration: none; }
+    footer a:hover { color: #aaa; }
+    .footer-links { display: flex; gap: 1.25rem; }
+
+    /* ── Tags ── */
+    .tags { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-top: 1.5rem; }
+    .tag {
+      background: #ffffff07; color: #445;
+      font-size: 0.72rem; padding: 0.25rem 0.7rem;
+      border-radius: 20px; border: 1px solid #ffffff0a;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="nav-brand">BLOCK BATTLE</span>
+    <div class="nav-links">
+      <a href="#modes">Modes</a>
+      <a href="#features">Features</a>
+      <a href="#controls">Controls</a>
+      <a href="../">Developer</a>
+    </div>
+  </nav>
+
+  <!-- ── Hero ── -->
+  <section class="hero">
+    <div class="hero-badge">⚡ Multiplayer 3D Shooter</div>
+    <h1>BLOCK<br><span>BATTLE</span></h1>
+    <p class="hero-sub">Multiplayer 3D Shooter</p>
+    <p class="hero-desc">Survive zombie waves, snipe enemies, and battle friends in real-time. Register to save your level and unlock new game modes.</p>
+    <div class="hero-btns">
+      <!-- Replace # with your Google Play link when published -->
+      <a href="#" class="btn-primary">▶ &nbsp;Get it on Google Play</a>
+      <a href="#modes" class="btn-secondary">View Game Modes →</a>
+    </div>
+  </section>
+
+  <!-- ── Stats ── -->
+  <div class="stats">
+    <div class="stat"><div class="stat-num">6</div><div class="stat-label">Game Modes</div></div>
+    <div class="stat"><div class="stat-num">110</div><div class="stat-label">Max Level</div></div>
+    <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Waves</div></div>
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">Platforms</div></div>
+  </div>
+
+  <!-- ── Game Modes ── -->
+  <section id="modes">
+    <p class="section-label">Game Modes</p>
+    <h2 class="section-title">Pick Your Battle</h2>
+    <p class="section-desc">Six ways to play, each with its own rules, rewards, and chaos.</p>
+
+    <div class="modes-grid">
+      <div class="mode-card">
+        <div class="mode-icon">⚔️</div>
+        <h3>Block Battle</h3>
+        <p>Classic wave survival. Hold off endless AI enemies and see how long you last.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-icon">🧟</div>
+        <h3>Zombie Rush</h3>
+        <p>Melee zombies hunt you down in waves. No range advantage — just reflexes.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-icon">🎯</div>
+        <h3>Sniper Alley</h3>
+        <p>Long-range precision combat. One shot, one kill. Patience wins here.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-icon">🛡️</div>
+        <h3>Team War</h3>
+        <p>Red vs Blue deathmatch. Coordinate with teammates or go rogue — your call.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-icon">🌌</div>
+        <h3>Sky Wars</h3>
+        <p>Fight on floating platforms high above the void. Fall off and it's over.</p>
+      </div>
+      <div class="mode-card">
+        <div class="mode-icon">👹</div>
+        <h3>Boss Raid</h3>
+        <p>Massive boss fights every round. Team up or take it solo — bosses hit hard.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Features ── -->
+  <section id="features" style="background:#0b0d14; border-top:1px solid var(--border); border-bottom:1px solid var(--border);">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Built to Battle</h2>
+    <p class="section-desc">Everything you need for a real multiplayer experience.</p>
+
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">🌐</div><div><h4>Real-Time Multiplayer</h4><p>Play with friends worldwide via WebSocket-powered real-time sync.</p></div></div>
+      <div class="feature-card"><div class="feature-icon">🔑</div><div><h4>Private Room Codes</h4><p>Invite friends with a private code and start a match instantly.</p></div></div>
+      <div class="feature-card"><div class="feature-icon">⬆️</div><div><h4>Level Up System</h4><p>Progress from Level 1 to 110. Unlock new zones as you advance.</p></div></div>
+      <div class="feature-card"><div class="feature-icon">🔥</div><div><h4>Kill Streaks</h4><p>Chain kills to trigger multi-kill announcements and wave bonuses.</p></div></div>
+      <div class="feature-card"><div class="feature-icon">🎨</div><div><h4>Character Customization</h4><p>Personalize your block character with unlockable skins and gear.</p></div></div>
+      <div class="feature-card"><div class="feature-icon">📱</div><div><h4>Mobile & Desktop</h4><p>Full touch controls on mobile, keyboard + mouse on desktop. Both feel native.</p></div></div>
+    </div>
+
+    <div class="tags">
+      <span class="tag">multiplayer</span>
+      <span class="tag">3d-shooter</span>
+      <span class="tag">mobile-friendly</span>
+      <span class="tag">zombies</span>
+      <span class="tag">battle-royale</span>
+      <span class="tag">block</span>
+      <span class="tag">websocket</span>
+      <span class="tag">real-time</span>
+    </div>
+  </section>
+
+  <!-- ── Controls ── -->
+  <section id="controls">
+    <p class="section-label">Controls</p>
+    <h2 class="section-title">How to Play</h2>
+    <p class="section-desc">Works on both desktop and mobile — pick up and play immediately.</p>
+
+    <div class="controls-wrap">
+      <div class="controls-card">
+        <h3>🖥 Desktop</h3>
+        <div class="key-row"><span class="key-action">Move</span><span class="key-bind">W A S D</span></div>
+        <div class="key-row"><span class="key-action">Aim</span><span class="key-bind">Mouse</span></div>
+        <div class="key-row"><span class="key-action">Shoot</span><span class="key-bind">Click</span></div>
+        <div class="key-row"><span class="key-action">Jump</span><span class="key-bind">Space</span></div>
+        <div class="key-row"><span class="key-action">Crouch</span><span class="key-bind">C</span></div>
+      </div>
+      <div class="controls-card">
+        <h3>📱 Mobile</h3>
+        <div class="key-row"><span class="key-action">Move</span><span class="key-bind">Joystick</span></div>
+        <div class="key-row"><span class="key-action">Aim</span><span class="key-bind">Drag</span></div>
+        <div class="key-row"><span class="key-action">Shoot</span><span class="key-bind">Fire Button</span></div>
+        <div class="key-row"><span class="key-action">Jump</span><span class="key-bind">Jump Button</span></div>
+        <div class="key-row"><span class="key-action">Crouch</span><span class="key-bind">Crouch Button</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CTA ── -->
+  <section class="cta">
+    <h2>Ready to Drop In?</h2>
+    <p>Download Block Battle and join the fight. Free to play.</p>
+    <a href="#" class="btn-primary">▶ &nbsp;Get it on Google Play</a>
+  </section>
+
+  <footer>
+    <span>© 2026 Tahzeeb Akhlaq</span>
+    <div class="footer-links">
+      <a href="../privacy-policy.html">Privacy Policy</a>
+      <a href="mailto:tahzeebakhlaq26@gmail.com">Contact</a>
+      <a href="../">All Apps</a>
+    </div>
+  </footer>
+
+</body>
+</html>
