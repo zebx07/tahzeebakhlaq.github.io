@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Paste your Google Search Console verification tag here when needed -->
   <!-- <meta name="google-site-verification" content="YOUR_CODE" /> -->
   <title>Tahzeeb Akhlaq – App Developer</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: #0f0f11;
@@ -17,7 +15,6 @@
       display: flex;
       flex-direction: column;
     }
-
     header {
       padding: 1.5rem 2rem;
       border-bottom: 1px solid #222;
@@ -25,18 +22,10 @@
       justify-content: space-between;
       align-items: center;
     }
-
     .brand { font-size: 1.05rem; font-weight: 600; color: #fff; }
-
-    nav a {
-      color: #777;
-      text-decoration: none;
-      font-size: 0.875rem;
-      margin-left: 1.5rem;
-    }
+    nav a { color: #777; text-decoration: none; font-size: 0.875rem; margin-left: 1.5rem; }
     nav a:hover { color: #fff; }
 
-    /* ── Hero ── */
     .hero {
       flex: 1;
       display: flex;
@@ -46,7 +35,6 @@
       text-align: center;
       padding: 5rem 2rem 3rem;
     }
-
     .avatar {
       width: 76px; height: 76px;
       border-radius: 50%;
@@ -55,7 +43,6 @@
       font-size: 1.8rem; font-weight: 700; color: #fff;
       margin-bottom: 1.5rem;
     }
-
     h1 {
       font-size: clamp(1.8rem, 4vw, 2.8rem);
       font-weight: 700;
@@ -63,16 +50,8 @@
       color: #fff;
       margin-bottom: 0.6rem;
     }
+    .tagline { font-size: 1rem; color: #777; max-width: 440px; line-height: 1.6; margin-bottom: 3rem; }
 
-    .tagline {
-      font-size: 1rem;
-      color: #777;
-      max-width: 440px;
-      line-height: 1.6;
-      margin-bottom: 3rem;
-    }
-
-    /* ── App grid ── */
     .apps {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -81,29 +60,28 @@
       max-width: 900px;
       padding: 0 1rem;
     }
-
     .app-card {
       background: #18181b;
       border: 1px solid #2a2a2e;
       border-radius: 16px;
       padding: 1.5rem;
       text-align: left;
-      transition: border-color 0.2s;
+      text-decoration: none;
+      display: block;
+      transition: border-color 0.2s, transform 0.2s;
     }
-    .app-card:hover { border-color: #444; }
-
+    .app-card:hover { border-color: #6c63ff; transform: translateY(-2px); }
     .app-icon {
-      width: 50px; height: 50px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #6c63ff, #3ecfcf);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.4rem;
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      overflow: hidden;
       margin-bottom: 0.9rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
     }
-
+    .app-icon img { width: 100%; height: 100%; object-fit: cover; }
     .app-card h2 { font-size: 1.05rem; font-weight: 600; color: #fff; margin-bottom: 0.35rem; }
     .app-card p  { font-size: 0.85rem; color: #777; line-height: 1.5; margin-bottom: 1rem; }
-
     .badge {
       display: inline-block;
       background: #6c63ff1a;
@@ -115,12 +93,7 @@
       border: 1px solid #6c63ff33;
     }
 
-    /* ── Contact ── */
-    .contact-section {
-      padding: 2.5rem 2rem;
-      text-align: center;
-      border-top: 1px solid #222;
-    }
+    .contact-section { padding: 2.5rem 2rem; text-align: center; border-top: 1px solid #222; }
     .contact-section p { color: #555; font-size: 0.85rem; margin-bottom: 0.4rem; }
     .contact-section a { color: #a09af8; text-decoration: none; font-size: 0.95rem; }
     .contact-section a:hover { text-decoration: underline; }
@@ -137,7 +110,6 @@
   </style>
 </head>
 <body>
-
   <header>
     <span class="brand">Tahzeeb Akhlaq</span>
     <nav>
@@ -150,30 +122,19 @@
   <main class="hero">
     <div class="avatar">T</div>
     <h1>Tahzeeb Akhlaq</h1>
-    <p class="tagline">Independent Android developer building useful, well-crafted apps.</p>
+    <p class="tagline">Independent developer building useful, well-crafted apps and games.</p>
 
-    <!-- ══════════════════════════════════════════
-         ADD / REMOVE APP CARDS HERE
-         Copy one <div class="app-card">…</div>
-         block for each new app you publish.
-    ══════════════════════════════════════════ -->
     <div class="apps" id="apps">
 
-      <div class="app-card">
-        <div class="app-icon">📱</div>
-        <h2>App Name</h2>
-        <p>Short description of what this app does and who it helps. 1–2 sentences max.</p>
+      <!-- Block Battle -->
+      <a class="app-card" href="block-battle/">
+        <div class="app-icon">🎮</div>
+        <h2>Block Battle</h2>
+        <p>A fast-paced multiplayer 3D block shooter — zombie waves, sniper duels, team wars, and boss raids.</p>
         <span class="badge">Google Play</span>
-      </div>
+      </a>
 
-      <!-- Example second app (delete if not needed)
-      <div class="app-card">
-        <div class="app-icon">🎯</div>
-        <h2>Another App</h2>
-        <p>Short description of your second app.</p>
-        <span class="badge">Google Play</span>
-      </div>
-      -->
+      <!-- Add future apps below — copy the <a class="app-card"> block -->
 
     </div>
   </main>
@@ -187,6 +148,5 @@
     <span>© 2026 Tahzeeb Akhlaq</span>
     <a href="privacy-policy.html">Privacy Policy</a>
   </footer>
-
 </body>
 </html>
